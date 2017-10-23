@@ -1,0 +1,37 @@
+{
+  "name": "fulcrum-desktop-dropbox",
+  "version": "0.0.0",
+  "main": "dist/plugin.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "node_modules/.bin/babel *.js --out-dir dist --source-maps=inline",
+    "watch": "node_modules/.bin/babel *.js --out-dir dist --source-maps=inline --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "dropbox": "^2.5.12",
+    "fulcrum-desktop-plugin": "^1.4.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2"
+  },
+  "babel": {
+    "plugins": [
+      "fulcrum-desktop"
+    ],
+    "presets": [
+      "stage-0",
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-fulcrum-desktop": "^1.0.0"
+  }
+}
