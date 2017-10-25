@@ -26,6 +26,10 @@ export default class {
           desc: 'organization name',
           required: true,
           type: 'string'
+        },
+        dropboxPath: {
+          desc: 'dropbox path',
+          type: 'string'
         }
       },
       handler: this.runCommand
@@ -34,6 +38,26 @@ export default class {
 
   tempPath(media) {
     return path.join(__dirname, 'tmp', media.id);
+  }
+
+  dropboxPath(type, id) {
+    const preDir = fulcrum.args.dropboxPath || '';
+
+    const dir = {
+      photo: 'photos',
+      video: 'video',
+      audio: 'audio',
+      signature: 'signatures'
+    }[type];
+
+    const extension = {
+      photo: 'jpg',
+      video: 'mp4',
+      audio: 'm4a',
+      signature: 'png'
+    }[type];
+
+    return `${preDir}/${dir}/${id}.${extension}`;
   }
 
   runCommand = async () => {
@@ -58,22 +82,22 @@ export default class {
 
   handlePhotoSave = async ({account, photo}) => {
     const downloadURL = APIClient.getPhotoURL(account, photo);
-    await this.uploadFile(account, photo, downloadURL, `/photos/${photo.id}.jpg`);
+    await this.uploadFile(account, photo, downloadURL, this.dropboxPath('photo', photo.id));
   }
 
   handleVideoSave = async ({account, video}) => {
     const downloadURL = APIClient.getVideoURL(account, video);
-    await this.uploadFile(account, video, downloadURL, `/videos/${video.id}.mp4`);
+    await this.uploadFile(account, video, downloadURL, this.dropboxPath('video', video.id));
   }
 
   handleAudioSave = async ({account, audio}) => {
     const downloadURL = APIClient.getAudioURL(account, audio);
-    await this.uploadFile(account, audio, downloadURL, `/audio/${audio.id}.m4a`);
+    await this.uploadFile(account, audio, downloadURL, this.dropboxPath('audio', audio.id));
   }
 
   handleSignatureSave = async ({account, signature}) => {
     const downloadURL = APIClient.getSignatureURL(account, signature);
-    await this.uploadFile(account, signature, downloadURL, `/signatures/${signature.id}.png`);
+    await this.uploadFile(account, signature, downloadURL, this.dropboxPath('signature', signature.id));
   }
 
   async uploadFile(account, media, url, name) {
