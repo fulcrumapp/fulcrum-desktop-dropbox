@@ -45,7 +45,7 @@ export default class {
 
     const dir = {
       photo: 'photos',
-      video: 'video',
+      video: 'videos',
       audio: 'audio',
       signature: 'signatures'
     }[type];
